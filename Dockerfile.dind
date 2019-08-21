@@ -1,0 +1,11 @@
+FROM pistacks/docker:19.03.0
+
+RUN apk add --no-cache btrfs-progs e2fsprogs iptables xz
+
+RUN wget https://raw.githubusercontent.com/moby/moby/master/hack/dind -O /usr/local/bin/dind \
+    && chmod +x /usr/local/bin/dind
+ADD dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
+RUN chmod +x /usr/local/bin/dockerd-entrypoint.sh
+
+VOLUME /var/lib/docker
+ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
