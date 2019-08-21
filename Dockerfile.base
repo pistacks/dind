@@ -1,0 +1,12 @@
+FROM pistacks/alpine:3.10.1
+ENV DOCKER_VERSION=19.03.0
+ENV DOCKER_ARCH=armhf
+
+RUN apk add --no-cache curl ca-certificates git openssh-client procps
+RUN cd /tmp && wget https://download.docker.com/linux/static/stable/${DOCKER_ARCH}/docker-${DOCKER_VERSION}.tgz \
+    && tar -xf docker-${DOCKER_VERSION}.tgz && mv docker/* /usr/local/bin/ \
+    && rm -rf /tmp/docker*
+
+ADD docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
